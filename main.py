@@ -21,10 +21,3 @@ async def main():
         await bot.start(token)
 
 asyncio.run(main())
-
-@bot.event
-async def on_ready():
-    print('Logged in as')
-    print(bot.user.name)
-    print(bot.user.id)
-    print('------')
