@@ -26,9 +26,28 @@ class Gpt(commands.Cog):
             )
             # get content property of result
             response = response.choices[0].message.content
-            await ctx.send(response)
+            responses = split_message(response)
+            for response in responses:
+                await ctx.send(response)
         except Exception as e:
             await ctx.send(e)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Gpt(bot))
+
+def split_message(msg):
+    """
+    Splits a message into a list of strings, each containing at most 2000 characters.
+    The splitting is done at spaces if possible.
+    """
+    msgs = []
+    curr = ''
+    for word in msg.split():
+        if len(curr) + len(word) <= 2000:
+            curr += ' ' + word if curr else word
+        else:
+            msgs.append(curr)
+            curr = word
+    if curr:
+        msgs.append(curr)
+    return msgs
