@@ -43,7 +43,7 @@ def split_message(msg):
     msgs = []
     curr = ''
     for word in msg.split():
-        if len(curr) + len(word) <= 2000:
+        if len(curr) + len(word) +1 <= 2000:
             curr += ' ' + word if curr else word
         else:
             msgs.append(curr)
