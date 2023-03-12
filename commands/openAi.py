@@ -10,6 +10,7 @@ class OpenAi(commands.Cog):
 
     @commands.command()
     async def chat(self, ctx, *args):
+        """Generate text using OpenAI"""
         message = ' '.join(args)
         try:
             record = Record.get_instance()
@@ -34,6 +35,7 @@ class OpenAi(commands.Cog):
 
     @commands.command()
     async def img(self, ctx, *args):
+        """Generate an image using DALL-E"""
         message = ' '.join(args)
         try:
             response = await openai.Image.acreate(

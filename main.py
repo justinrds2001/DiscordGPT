@@ -15,6 +15,12 @@ async def load():
         if fileName.endswith(".py"):
             await bot.load_extension(f"commands.{fileName[:-3]}")
 
+@bot.event
+async def on_ready():
+    activity = discord.Game(name="!help for commands")
+    await bot.change_presence(activity=activity)
+    print(f"{bot.user.name} is now online!")
+
 async def main():
     async with bot:
         await load()
