@@ -3,8 +3,8 @@ from discord.ext import commands
 import os
 import asyncio
 from dotenv import load_dotenv
-
 load_dotenv()
+
 token = os.getenv("BOT_TOKEN")
 
 intents: discord.Intents = discord.Intents.all()

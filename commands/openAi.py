@@ -4,12 +4,12 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from chatRecord import Record
 from discord.ext import commands
 
-class Gpt(commands.Cog):
+class OpenAi(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
-    async def gpt(self, ctx, *args):
+    async def chat(self, ctx, *args):
         message = ' '.join(args)
         try:
             record = Record.get_instance()
@@ -32,8 +32,23 @@ class Gpt(commands.Cog):
         except Exception as e:
             await ctx.send(e)
 
+    @commands.command()
+    async def img(self, ctx, *args):
+        message = ' '.join(args)
+        try:
+            response = await openai.Image.acreate(
+                prompt = message,
+                n = 1,
+                size = "512x512"
+            )
+            response = response.data[0].url
+            await ctx.send(response)
+        except Exception as e:
+            await ctx.send(e)
+
+
 async def setup(bot: commands.Bot):
-    await bot.add_cog(Gpt(bot))
+    await bot.add_cog(OpenAi(bot))
 
 def split_message(msg):
     """
