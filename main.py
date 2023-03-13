@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 import os
 import asyncio
@@ -19,7 +20,13 @@ async def load():
 async def on_ready():
     activity = discord.Game(name="!commands for commands")
     await bot.change_presence(activity=activity)
+    try:
+        synced = await bot.tree.sync()
+        print(f'Synced {len(synced)} commands')
+    except Exception as e:
+        print(e)
     print(f"{bot.user.name} is now online!")
+    
 
 async def main():
     async with bot:

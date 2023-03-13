@@ -3,19 +3,23 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from chatRecord import Record
 from discord.ext import commands
+from discord import app_commands
+import discord
+import asyncio
 
 class OpenAi(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def chat(self, ctx, *args):
+    @app_commands.command()
+    async def chat(self, interaction: discord.Interaction, message: str):
         """Generate text using OpenAI"""
-        message = ' '.join(args)
         try:
+            # sent hidden message
+            await interaction.response.send_message(content="", ephemeral=True)
             record = Record.get_instance()
             # get channel id
-            channelId = ctx.channel.id
+            channelId = interaction.channel_id
             # add the message to record
             record.add_message(channelId, message)
             # get messages from record
@@ -29,14 +33,13 @@ class OpenAi(commands.Cog):
             response = response.choices[0].message.content
             responses = split_message(response)
             for response in responses:
-                await ctx.send(response)
+                await interaction.response.send_message(response)
         except Exception as e:
-            await ctx.send(e)
+            await interaction.response.send_message(e, )
 
-    @commands.command()
-    async def img(self, ctx, *args):
+    @app_commands.command()
+    async def img(self, interaction: discord.Interaction, message: str):
         """Generate an image using DALL-E"""
-        message = ' '.join(args)
         try:
             response = await openai.Image.acreate(
                 prompt = message,
@@ -44,9 +47,9 @@ class OpenAi(commands.Cog):
                 size = "512x512"
             )
             response = response.data[0].url
-            await ctx.send(response)
+            await interaction.response.send_message(response)
         except Exception as e:
-            await ctx.send(e)
+            await interaction.response.send_message(e)
 
 
 async def setup(bot: commands.Bot):
