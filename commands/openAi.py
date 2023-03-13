@@ -16,7 +16,7 @@ class OpenAi(commands.Cog):
             record = Record.get_instance()
             # get channel id
             channelId = ctx.channel.id
-            # add message to record
+            # add the message to record
             record.add_message(channelId, message)
             # get messages from record
             messages = record.get_record(channelId)
