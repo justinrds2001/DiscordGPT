@@ -12,7 +12,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 async def load():
     for fileName in os.listdir("./commands"):
-        if fileName.endswith(".py"):
+        if fileName.endswith(".py") and fileName != "music.py":
             await bot.load_extension(f"commands.{fileName[:-3]}")
 
 @bot.event
