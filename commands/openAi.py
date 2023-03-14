@@ -5,7 +5,6 @@ from chatRecord import Record
 from discord.ext import commands
 from discord import app_commands
 import discord
-import asyncio
 
 class OpenAi(commands.Cog):
     def __init__(self, bot):
@@ -16,7 +15,6 @@ class OpenAi(commands.Cog):
         """Generate text using OpenAI"""
         try:
             # sent hidden message
-            await interaction.response.send_message(content="", ephemeral=True)
             record = Record.get_instance()
             # get channel id
             channelId = interaction.channel_id
@@ -24,7 +22,7 @@ class OpenAi(commands.Cog):
             record.add_message(channelId, message)
             # get messages from record
             messages = record.get_record(channelId)
-
+            await interaction.response.defer()
             response = await openai.ChatCompletion.acreate(
                 model="gpt-3.5-turbo",
                 messages=messages
@@ -33,23 +31,26 @@ class OpenAi(commands.Cog):
             response = response.choices[0].message.content
             responses = split_message(response)
             for response in responses:
-                await interaction.response.send_message(response)
+                await interaction.followup.send(response)
         except Exception as e:
-            await interaction.response.send_message(e)
+            print(e)
+            await interaction.followup.send(e)
 
     @app_commands.command()
     async def img(self, interaction: discord.Interaction, message: str):
         """Generate an image using DALL-E"""
         try:
+            await interaction.response.defer()
             response = await openai.Image.acreate(
                 prompt = message,
                 n = 1,
                 size = "512x512"
             )
+            
             response = response.data[0].url
-            await interaction.response.send_message(response)
+            await interaction.followup.send(response)
         except Exception as e:
-            await interaction.response.send_message(e)
+            await interaction.followup.send(e)
 
 
 async def setup(bot: commands.Bot):
