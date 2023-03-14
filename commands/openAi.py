@@ -35,7 +35,7 @@ class OpenAi(commands.Cog):
             for response in responses:
                 await interaction.response.send_message(response)
         except Exception as e:
-            await interaction.response.send_message(e, )
+            await interaction.response.send_message(e)
 
     @app_commands.command()
     async def img(self, interaction: discord.Interaction, message: str):
