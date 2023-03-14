@@ -48,7 +48,7 @@ class DeepTranslate(commands.Cog, discord.ui.View):
     async def translate(self ,interaction: discord.Interaction, target_language: app_commands.Choice[str], message: str):
         """Translate"""
         try:
-            usage = translator.get_usage + len(message)
+            usage = translator.get_usage() + len(message)
             if usage > 500000:
                 raise Exception(f"Translator will have reached its limit of 500000 characters by {usage - 500000}")
             await interaction.response.defer()
