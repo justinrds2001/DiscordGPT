@@ -18,7 +18,7 @@ async def load():
 
 @bot.event
 async def on_ready():
-    activity = discord.Game(name="!commands for commands")
+    activity = discord.Game(name="/commands for commands")
     await bot.change_presence(activity=activity)
     try:
         synced = await bot.tree.sync()

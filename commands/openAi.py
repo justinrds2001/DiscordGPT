@@ -14,7 +14,6 @@ class OpenAi(commands.Cog):
     async def chat(self, interaction: discord.Interaction, message: str):
         """Generate text using OpenAI"""
         try:
-            # sent hidden message
             record = Record.get_instance()
             # get channel id
             channelId = interaction.channel_id
@@ -37,14 +36,14 @@ class OpenAi(commands.Cog):
             await interaction.followup.send(e)
 
     @app_commands.command()
-    async def img(self, interaction: discord.Interaction, message: str):
+    async def img(self, interaction: discord.Interaction, description: str):
         """Generate an image using DALL-E"""
         try:
             await interaction.response.defer()
             response = await openai.Image.acreate(
-                prompt = message,
+                prompt = description,
                 n = 1,
-                size = "512x512"
+                size = "1024x1024"
             )
             
             response = response.data[0].url
